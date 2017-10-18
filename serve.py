@@ -1,4 +1,4 @@
-from models import ConversationalModel
+from src.models import ConversationalModel
 from flask import Flask, request, jsonify
 import json
 
@@ -12,10 +12,17 @@ def hello():
 # Routing
 @app.route('/query', methods=['POST'])
 def reply():
-    print('New request', request.form['message'])
-    response = chatBot.decode_dialogflow(request.form['message'])
-    print('Got response:' , response)
-    return jsonify( { 'text':  response} )
+    # print('New request', request.form['message'])
+    error = True
+    response = ''
+    try:
+        response = chatBot.decode_dialogflow(request.form['message'])
+        error = False
+    except Exception as e:
+    # print('Got response:' , response)
+        response = 'Server error. Please try again.'
+
+    return jsonify( { 'error': error, 'text':  response} )
 
 if (__name__ == "__main__"):
     app.run(port = 5000)
