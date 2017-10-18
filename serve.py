@@ -1,4 +1,5 @@
 from src.models import ConversationalModel
+from src.hooks.weather import *
 from flask import Flask, request, jsonify
 import json
 
@@ -24,5 +25,17 @@ def reply():
 
     return jsonify( { 'error': error, 'text':  response} )
 
+@app.route('/hooks/weather', methods=['POST'])
+def weatherHook():
+    print('here')
+    req = request.get_json(silent=True, force=True)
+    print('Req', req)
+    city = req.get('result').get('parameters').get('geo-city')
+    res = getWeather(city)
+    # res = {'done': True}
+    print('weather result: ', res)
+    return jsonify(res)
+    # return 'working'
+
 if (__name__ == "__main__"):
-    app.run(port = 5000)
+    app.run(debug=True, port = 5000)
