@@ -21,6 +21,7 @@ def reply():
         error = False
     except Exception as e:
     # print('Got response:' , response)
+        print(e)
         response = 'Server error. Please try again.'
 
     return jsonify( { 'error': error, 'text':  response} )
