@@ -18,7 +18,7 @@ class ConversationalModel:
 
         request = ai.text_request()
         # session id must be different for each client tbh
-        request.session_id = '2'
+        request.session_id = '3'
 
         request.query = message
 
