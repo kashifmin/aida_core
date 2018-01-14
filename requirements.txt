@@ -1,3 +1,5 @@
 Flask
 apiai
 gunicorn
+PIL
+numpy
