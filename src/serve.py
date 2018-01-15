@@ -1,4 +1,4 @@
-from models import ConversationalModel
+from models.Conversational import ConversationalModel
 from hooks.weather import *
 from flask import Flask, request, jsonify,redirect,json
 from PIL import Image
