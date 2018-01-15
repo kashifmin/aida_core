@@ -1,4 +1,5 @@
 from models.Conversational import ConversationalModel
+from models.ImageClassification import ImageClassificationModel
 from hooks.weather import *
 from flask import Flask, request, jsonify,redirect,json
 from PIL import Image
@@ -42,12 +43,12 @@ def weatherHook():
     return jsonify(res)
     # return 'working'
 
-@app.route('/object',methods=['POST'])
+@app.route('/classify',methods=['POST'])
 def detectObject():
     req = request.get_json(silent=True, force=True)
     print(req)
-    imageUri=req.get('image').get('imageUri')
-    imageData=req.get('image').get('imageData')
+    imageUri = req.get('image').get('imageUri')
+    imageData = req.get('image').get('imageData') # base64 encoded
     
     img_arr=""
     if imageUri is None:
@@ -55,13 +56,9 @@ def detectObject():
     else:
         img_arr=convertArrayUri(imageUri)
     #print(img_arr)
-
+    model = ImageClassificationModel()
     try:
-        response=[{
-            'description': 'car',
-            'score': 0.8114 },{
-            'description': 'bike',
-            'score': 0.9114 }]
+        response = model.classify()
             
     except Exception as e:
         pass
