@@ -84,15 +84,24 @@ def loadModel():
             tf.import_graph_def(od_graph_def, name='')
     print("Model loaded.")
 
-def processResult(res, ntop=5):
+def processResult(img, res, ntop=5):
     ''' 
         Takes top 5 classes and returns their class labels, bounding box, and scores 
     '''
+    height, width = img.shape[1], img.shape[2]
     predictions = []
     for i in range(ntop):
         pred = dict(categories[int(res[2][0][i])])
-        pred['score'] = res[1][0][i] * 100
-        pred['boundingBox'] = list(res[0][0][i])
+        pred['score'] = round(res[1][0][i] * 100, 2)
+        boundingBoxRaw = list(res[0][0][i])
+
+        # normalize coordinates wrt image size
+        pred['boxes'] = {
+            'ymin': boundingBoxRaw[0]*height,
+            'xmin': boundingBoxRaw[1]*width,
+            'ymax': boundingBoxRaw[2]*height,
+            'xmax': boundingBoxRaw[3]*width
+        }
 
         predictions.append(pred)
     return predictions
@@ -117,4 +126,4 @@ def predict(img_data):
             results = sess.run(
                 [boxes, scores, classes, num_detections],
                 feed_dict={image_tensor: image_np_expanded})
-            return processResult(results)
+            return processResult(image_np_expanded, results)

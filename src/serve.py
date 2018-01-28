@@ -1,15 +1,17 @@
 from models.Conversational import ConversationalModel
 from models.ImageClassification import ImageClassificationModel
 from hooks.weather import *
-from flask import Flask, request, jsonify,redirect,json
+from flask import Flask, request, jsonify,redirect
 from PIL import Image
 from io import BytesIO
 from numpy import array
 import base64,urllib
 
+import json
 
 app = Flask(__name__)
 chatBot = ConversationalModel()
+objectRecModel = ImageClassificationModel()
 
 @app.route("/") 
 def hello(): 
@@ -43,38 +45,20 @@ def weatherHook():
     return jsonify(res)
     # return 'working'
 
-@app.route('/classify',methods=['POST'])
-def detectObject():
-    req = request.get_json(silent=True, force=True)
-    print(req)
-    imageUri = req.get('image').get('imageUri')
-    imageData = req.get('image').get('imageData') # base64 encoded
+@app.route('/object-detection',methods=['POST'])
+def detectObjects():
     
-    img_arr=""
-    if imageUri is None:
-        img_arr=convertArrayData(imageData)
-    else:
-        img_arr=convertArrayUri(imageUri)
-    #print(img_arr)
-    model = ImageClassificationModel()
     try:
-        response = model.classify()
-            
+        req = request.get_json(silent=True, force=True)
+        print("Request", req)
+        imageUri = req.get('imageUri')
     except Exception as e:
-        pass
-    return jsonify(labelAnnotation=response)
+        return jsonify(error=True, message=str(e))
+    
+    
+    response = objectRecModel.predict(imageUri)
+    return jsonify(response)
 
-
-
-def convertArrayData(encoded_image):
-    img=Image.open(BytesIO(base64.b64decode(encoded_image)))
-    img_arr=array(img)
-    return img_arr
-
-def convertArrayUri(imageUri):
-    img=Image.open(BytesIO(urllib.request.urlopen(imageUri).read()))
-    img_arr=array(img)
-    return img_arr
 
 if (__name__ == "__main__"):
     app.run(debug=True, port = 5000)
