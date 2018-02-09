@@ -38,7 +38,7 @@ from object_detection.utils import visualization_utils as vis_util
 
 # What model to download.
 BASE_FOLDER = '/home/kashif/Projects/FinalYear/ObjectRec/tf-object-detection-api/'
-MODEL_NAME = BASE_FOLDER + 'ssd_mobilenet_v1_coco_2017_11_17'
+MODEL_NAME = BASE_FOLDER + 'faster_rcnn_inception_v2_coco_2017_11_08'
 
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
 PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
@@ -96,7 +96,7 @@ def processResult(img, res, ntop=5):
         boundingBoxRaw = list(res[0][0][i])
 
         # normalize coordinates wrt image size
-        pred['boxes'] = {
+        pred['boundingBox'] = {
             'ymin': boundingBoxRaw[0]*height,
             'xmin': boundingBoxRaw[1]*width,
             'ymax': boundingBoxRaw[2]*height,

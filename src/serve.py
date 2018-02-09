@@ -57,7 +57,7 @@ def detectObjects():
     
     
     response = objectRecModel.predict(imageUri)
-    return jsonify(response)
+    return jsonify(error=False, predictions=response)
 
 
 if (__name__ == "__main__"):
