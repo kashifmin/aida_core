@@ -1,4 +1,4 @@
-from .object_recognition.model_utils import loadModel, predict
+from .object_recognition.model_utils2 import loadModel, predict
 from io import BytesIO
 from PIL import Image
 import numpy as np 
@@ -18,7 +18,7 @@ class ImageClassificationModel:
         # predictions = self.model.predict()
         try:
             # img = Image.open(BytesIO(urllib.request.urlopen(imageUri).read()))
-            img = Image.open(BytesIO(requests.get(imageUri).content))
+            img = Image.open(BytesIO(requests.get(imageUri).content)).convert('RGB')
             img = load_image_into_numpy_array(img)
         except Exception as e:
             return { "error": True, "message": str(e) }

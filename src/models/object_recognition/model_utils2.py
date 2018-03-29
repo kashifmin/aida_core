@@ -73,7 +73,7 @@ categories = label_map_util.convert_label_map_to_categories(label_map, max_num_c
 category_index = label_map_util.create_category_index(categories)
 
 def loadModel():
-    global detection_graph
+    global detection_graph, sess
     
     print("Loading model ", MODEL_NAME, " ...")
     detection_graph = tf.Graph()
@@ -84,6 +84,8 @@ def loadModel():
             od_graph_def.ParseFromString(serialized_graph)
             tf.import_graph_def(od_graph_def, name='')
     print("Model loaded.")
+    sess = tf.Session(graph=detection_graph)
+    print("Session started.")
 
 def processResult(img, res, ntop=5):
     ''' 
@@ -135,46 +137,45 @@ def processResultNew(img, classes, scores, boxes, ntop=5):
 
 
 def predict(img_data):
-    global detection_graph
-    with detection_graph.as_default():
-        with tf.Session(graph=detection_graph) as sess:
-            image_np_expanded = np.expand_dims(img_data, axis=0)
-            image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
-            # Each box represents a part of the image where a particular object was detected.
-            boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-            # Each score represent how level of confidence for each of the objects.
-            # Score is shown on the result image, together with the class label.
-            scores = detection_graph.get_tensor_by_name('detection_scores:0')
-            classes = detection_graph.get_tensor_by_name('detection_classes:0')
-            num_detections = detection_graph.get_tensor_by_name('num_detections:0')
-            # Actual detection.
-        #   (boxes, scores, classes, num_detections) = sess.run(
-        #       [boxes, scores, classes, num_detections],
-        #       feed_dict={image_tensor: image_np_expanded})
-            results = sess.run(
-                [boxes, scores, classes, num_detections],
-                feed_dict={image_tensor: image_np_expanded})
-            (boxes, scores, classes, num_detections) = results
-            print('image_data', img_data)
-            # Visualization of the results of a detection.
-            squeezed_boxes = np.squeeze(boxes)
-            squeezed_classes = np.squeeze(classes).astype(np.int32)
-            squeezed_scores = np.squeeze(scores)
+    global detection_graph,sess
+    
+    image_np_expanded = np.expand_dims(img_data, axis=0)
+    image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
+    # Each box represents a part of the image where a particular object was detected.
+    boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
+    # Each score represent how level of confidence for each of the objects.
+    # Score is shown on the result image, together with the class label.
+    scores = detection_graph.get_tensor_by_name('detection_scores:0')
+    classes = detection_graph.get_tensor_by_name('detection_classes:0')
+    num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+    # Actual detection.
+#   (boxes, scores, classes, num_detections) = sess.run(
+#       [boxes, scores, classes, num_detections],
+#       feed_dict={image_tensor: image_np_expanded})
+    results = sess.run(
+        [boxes, scores, classes, num_detections],
+        feed_dict={image_tensor: image_np_expanded})
+    (boxes, scores, classes, num_detections) = results
+    print('image_data', img_data)
+    # Visualization of the results of a detection.
+    squeezed_boxes = np.squeeze(boxes)
+    squeezed_classes = np.squeeze(classes).astype(np.int32)
+    squeezed_scores = np.squeeze(scores)
 
-            vis_util.visualize_boxes_and_labels_on_image_array(
-                img_data,
-                squeezed_boxes,
-                squeezed_classes,
-                squeezed_scores,
-                category_index,
-                use_normalized_coordinates=True,
-                line_thickness=8)
+    vis_util.visualize_boxes_and_labels_on_image_array(
+        img_data,
+        squeezed_boxes,
+        squeezed_classes,
+        squeezed_scores,
+        category_index,
+        use_normalized_coordinates=True,
+        line_thickness=8)
 
-            print(squeezed_boxes.shape, squeezed_classes.shape, squeezed_scores.shape)
-            print(category_index[squeezed_classes[0]])
-            print(category_index)
+    print(squeezed_boxes.shape, squeezed_classes.shape, squeezed_scores.shape)
+    print(category_index[squeezed_classes[0]])
+    print(category_index)
 
-            cv2.imwrite('lastpred.jpg', img_data)
-                
-            # return processResult(image_np_expanded, results)
-            return processResultNew(image_np_expanded, squeezed_classes, squeezed_scores, squeezed_boxes)
+    cv2.imwrite('lastpred.jpg', img_data)
+        
+    # return processResult(image_np_expanded, results)
+    return processResultNew(image_np_expanded, squeezed_classes, squeezed_scores, squeezed_boxes)

@@ -45,6 +45,10 @@ def weatherHook():
     return jsonify(res)
     # return 'working'
 
+# @app.route('/hooks', methods=['POST'])
+# def hooks():
+
+
 @app.route('/object-detection',methods=['POST'])
 def detectObjects():
     
@@ -61,4 +65,4 @@ def detectObjects():
 
 
 if (__name__ == "__main__"):
-    app.run(debug=True, port = 5000)
+    app.run(host = "0.0.0.0", port = 5000)
