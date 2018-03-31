@@ -55,12 +55,13 @@ def detectObjects():
     try:
         req = request.get_json(silent=True, force=True)
         print("Request", req)
-        imageUri = req.get('imageUri')
+        # imageUri = req.get('imageUri')
+        encodedImage = req.get('imageData')
     except Exception as e:
         return jsonify(error=True, message=str(e))
     
     
-    response = objectRecModel.predict(imageUri)
+    response = objectRecModel.predict(encodedImage=encodedImage)
     return jsonify(error=False, predictions=response)
 
 
