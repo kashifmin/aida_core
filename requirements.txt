@@ -1,5 +1,6 @@
 Flask
 apiai
 gunicorn
-PIL
+pillow
 numpy
+six
