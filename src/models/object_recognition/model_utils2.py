@@ -38,8 +38,8 @@ from object_detection.utils import visualization_utils as vis_util
 # In[4]:
 
 # What model to download.
-BASE_FOLDER = '/home/kashif/Projects/FinalYear/ObjectRec/tf-object-detection-api/'
-MODEL_NAME = BASE_FOLDER + 'faster_rcnn_inception_v2_coco_2017_11_08'
+BASE_FOLDER = '/usr/src/app/'
+MODEL_NAME = BASE_FOLDER + 'coco_inception'
 
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
 PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
