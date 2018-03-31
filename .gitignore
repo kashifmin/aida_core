@@ -1,7 +1,6 @@
+.bash_history
+.cache
+.ipynb_checkpoints
+.keras
 __pycache__
-venv
 *.pyc
-staticfiles
-.env
-.vscode
-*.jpg
