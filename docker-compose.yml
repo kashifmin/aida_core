@@ -2,8 +2,8 @@ version: '2.0'
 services: 
     aida:
         build: .
-        volumes: ['./src:/usr/src/aida', './data:/usr/src/app/data']
+        volumes: ['./src:/usr/src/aida', './tfmodels:/usr/src/app/tfmodels', './weights:/usr/src/app/weigths']
         command: bash -c "gunicorn serve:app --log-file=- -b 0.0.0.0:8000"
         ports: ["8000:8000"]
         environment:
-            PYTHONPATH: /usr/src/app/models/research:/usr/src/app/models/research/slim
+            PYTHONPATH: /usr/src/app/tfmodels/research:/usr/src/tfapp/models/research/slim
