@@ -38,7 +38,7 @@ from object_detection.utils import visualization_utils as vis_util
 # In[4]:
 
 # What model to download.
-BASE_FOLDER = '/usr/src/app/weigths'
+BASE_FOLDER = '/usr/src/app/weigths/'
 MODEL_NAME = BASE_FOLDER + 'faster_rcnn_inception_v2_coco_2018_01_28'
 
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
