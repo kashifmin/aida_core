@@ -6,4 +6,4 @@ services:
         command: bash -c "gunicorn serve:app --log-file=- -b 0.0.0.0:8000"
         ports: ["8000:8000"]
         environment:
-            PYTHONPATH: /usr/src/app/tfmodels/research:/usr/src/tfapp/models/research/slim
+            PYTHONPATH: /usr/src/app/tfmodels/research:/usr/src/app/tfmodels/research/slim
