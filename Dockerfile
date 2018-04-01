@@ -13,7 +13,7 @@ run apt install python3-tk --yes
 run apt install git --yes
 
 
-workdir /usr/src/app/models/research
+workdir /usr/src/app/tfmodels/research
 
 run apt-get install protobuf-compiler --yes
 
