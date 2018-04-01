@@ -1,1 +1,4 @@
-/*.jpg
+./*.jpg
+./tfmodels
+./weights
+
