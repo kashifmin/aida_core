@@ -76,6 +76,8 @@ def loadModel():
     global detection_graph, sess
     
     print("Loading model ", MODEL_NAME, " ...")
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth=True
     detection_graph = tf.Graph()
     with detection_graph.as_default():
         od_graph_def = tf.GraphDef()
@@ -84,7 +86,7 @@ def loadModel():
             od_graph_def.ParseFromString(serialized_graph)
             tf.import_graph_def(od_graph_def, name='')
     print("Model loaded.")
-    sess = tf.Session(graph=detection_graph)
+    sess = tf.Session(graph=detection_graph, config=config)
     print("Session started.")
 
 def processResult(img, res, ntop=5):
