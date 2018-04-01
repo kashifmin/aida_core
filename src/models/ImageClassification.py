@@ -36,7 +36,7 @@ class ImageClassificationModel:
             return img
         else:
             print('converting imagedata')
-            img = Image.open(BytesIO(base64.decodestring(encodedImage).encode('utf8'))).convert('RGB')
+            img = Image.open(BytesIO(base64.decodestring(encodedImage.encode('utf8')))).convert('RGB')
             print('concerted', img)
             img = load_image_into_numpy_array(img)
             return img
