@@ -1,4 +1,4 @@
-from tensorflow/tensorflow:latest-py3
+from gcr.io/tensorflow/tensorflow:latest-gpu-py3
 
 
 copy ./requirements.txt /requirements.txt

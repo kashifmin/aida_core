@@ -3,7 +3,7 @@ services:
     aida:
         build: .
         volumes: ['./src:/usr/src/aida', './tfmodels:/usr/src/app/tfmodels', './weights:/usr/src/app/weigths', './data:/usr/src/app/weigths/data']
-        command: bash -c "cd /usr/src/aida && gunicorn serve:app --log-file=- -b 0.0.0.0:8000"
+        command: bash -c "cd /usr/src/aida && gunicorn serve:app --log-file=- -b 0.0.0.0:8000 --timeout 240"
         ports: ["8000:8000"]
         environment:
             PYTHONPATH: /usr/src/app/tfmodels/research:/usr/src/app/tfmodels/research/slim
