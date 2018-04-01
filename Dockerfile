@@ -12,14 +12,7 @@ run apt install python3-tk --yes
 
 run apt install git --yes
 
-
-workdir /usr/src/app/models/research
-
 run apt-get install protobuf-compiler --yes
-
-run protoc object_detection/protos/*.proto --python_out=.
-
-cmd export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
 
 workdir /usr/src/aida
 
