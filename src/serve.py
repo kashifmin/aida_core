@@ -1,5 +1,6 @@
 from models.Conversational import ConversationalModel
 from models.ImageClassification import ImageClassificationModel
+from models.FaceRecognition import FaceRecognitionModel
 from hooks.weather import *
 from flask import Flask, request, jsonify,redirect
 from PIL import Image
@@ -12,6 +13,7 @@ import json
 app = Flask(__name__)
 chatBot = ConversationalModel()
 objectRecModel = ImageClassificationModel()
+faceRecModel = FaceRecognitionModel()
 
 @app.route("/") 
 def hello(): 
@@ -65,5 +67,21 @@ def detectObjects():
     return jsonify(error=False, predictions=response)
 
 
+@app.route('/face-recognition',methods=['POST'])
+def recognizeFaces():
+    try:
+        req = request.get_json(silent=True, force=True)
+        #print("Request", req)
+        # imageUri = req.get('imageUri')
+        encodedImage = req.get('imageData')
+        image = array(Image.open(BytesIO(base64.decodestring(encodedImage.encode('utf8')))).convert('RGB'))
+    except Exception as e:
+        return jsonify(error=True, message=str(e))
+    
+
+    response = faceRecModel.recognizeFaces(image)
+    return jsonify(error=False, faces=response)
+
+
 if (__name__ == "__main__"):
-    app.run(host = "0.0.0.0", port = 5000)
+    app.run(host = "0.0.0.0", port = 5000, debug=True)
