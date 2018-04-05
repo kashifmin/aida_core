@@ -72,7 +72,12 @@ label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
 categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
 
+
 def loadModel():
+    """ 
+    Reads a model from model file and initializes
+     a tensorflow graph and session
+    """
     global detection_graph, sess
     
     print("Loading model ", MODEL_NAME, " ...")
@@ -91,7 +96,7 @@ def loadModel():
 
 def processResult(img, res, ntop=5):
     ''' 
-        Takes top 5 classes and returns their class labels, bounding box, and scores 
+    Takes top 5 classes and returns their class labels, bounding box, and scores 
     '''
     height, width = img.shape[1], img.shape[2]
     predictions = []
@@ -139,6 +144,10 @@ def processResultNew(img, classes, scores, boxes, ntop=5):
 
 
 def predict(img_data):
+    """ 
+    Runs the object detection model on img_data (numpy array)
+    and returns the results after running processResultNew
+    """
     global detection_graph,sess
     
     image_np_expanded = np.expand_dims(img_data, axis=0)
