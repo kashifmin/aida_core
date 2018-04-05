@@ -5,6 +5,6 @@
 __pycache__
 *.pyc
 .vscode
-*.jpg
 weights
 tfmodels
+src/lastpred.jpg
